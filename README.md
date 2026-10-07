@@ -1,66 +1,60 @@
-# 🏢 Active Directory Homelab
+# Laboratorio empresarial AD + LDAP
 
-Enterprise-style homelab designed to learn and test **Microsoft Active Directory**, identity management and authentication in a realistic Windows/Linux environment.
+Laboratorio educativo de identidad y recursos con **Windows Server 2025,
+Windows 11 y Ubuntu**. Incluye una guía técnica y una web documental
+construida con React, TypeScript y Vite.
 
-## 🏗️ Architecture
+## Arquitectura
 
-| Host | IP | Role |
-|---|---|---|
-| `DC01` | `10.10.10.10` | Active Directory / DNS |
-| `DC02` | `10.10.10.11` | Secondary DC / DNS |
-| `FS01` | `10.10.10.20` | File Server |
-| `APP01` | `10.10.10.30` | LDAP Application |
-| `CA01` | `10.10.10.40` | Certificate Authority |
-| `CLIENT01` | `10.10.10.101` | Windows 11 Client |
-| `LINUX01` | `10.10.10.102` | Linux / LDAP Client |
+Dominio: `ad.lab.test` · NetBIOS: `LAB` · Red: `10.10.10.0/24`
+Gateway/NAT: `10.10.10.1`.
 
-```text
-Domain:   ad.lab.test
-NetBIOS:  LAB
-Network:  10.10.10.0/24
+| Equipo | IP | Función |
+| --- | --- | --- |
+| DC01 | 10.10.10.10 | AD DS, DNS y Global Catalog |
+| DC02 | 10.10.10.11 | AD DS, DNS y replicación |
+| FS01 | 10.10.10.20 | Ficheros SMB y permisos NTFS |
+| APP01 | 10.10.10.30 | Demo de integración LDAP sobre TLS |
+| CA01 | 10.10.10.40 | AD CS y certificados |
+| CLIENT01 | 10.10.10.101 | Windows 11 Pro/Enterprise |
+| LINUX01 | 10.10.10.102 | Ubuntu, LDAP y SSSD |
+
+## Ejecutar la web
+
+Requiere Node.js 22.12+ o 24 LTS. Desde la raíz del repositorio:
+
+```bash
+npm ci
+npm run dev
 ```
 
-## 🧪 Technologies
+```bash
+npm run build
+npm run preview
+```
 
-- Active Directory Domain Services
-- DNS
-- Kerberos
-- LDAP / LDAPS
-- Group Policy
-- SMB / NTFS
-- AGDLP
-- Active Directory Certificate Services
-- Windows Server 2025
-- Windows 11
-- Linux
-- PowerShell
+Para publicar, desplegar el contenido de `dist/` en un alojamiento estático.
 
-## 🚀 Lab Roadmap
+## Desplegar el laboratorio
 
-- [ ] Deploy `DC01`
-- [ ] Configure AD DS and DNS
-- [ ] Create OUs, users and groups
-- [ ] Join Windows clients to the domain
-- [ ] Configure Group Policies
-- [ ] Deploy File Server and AGDLP permissions
-- [ ] Test LDAP from Linux
-- [ ] Deploy `DC02` and configure replication
-- [ ] Test Domain Controller failover
-- [ ] Deploy AD CS / PKI
-- [ ] Configure LDAPS
-- [ ] Integrate an external application with LDAP
-- [ ] Automate infrastructure deployment
+Seguir la [guía técnica](docs/guia-tecnica.md) en orden: red y DC01;
+DNS y hora; OU y AGDLP; Windows y GPO; FS01; DC02 y replicación;
+CA y LDAPS; Linux y SSSD; integración de aplicación y pruebas de fallo.
 
-## 📚 Documentation
+- [Manual PDF](docs/Laboratorio-AD-LDAP.pdf).
+- `src/`: código y contenido de la web.
+- `examples/`: demo Python para APP01 y sus dependencias.
+- `docs/evidencias/`: resultados saneados de las pruebas.
 
-Full technical documentation, deployment procedures and troubleshooting guides are available in [`/docs`](docs/).
+## Validación y seguridad
 
-## 🎯 Purpose
+La web está compilada y revisada. Las pruebas de infraestructura deben
+ejecutarse en las VMs siguiendo la matriz de aceptación del manual.
+La demo LDAP requiere el dominio y sus certificados; no es un backend de
+producción. Usar una red aislada, TLS validado y cuentas con mínimo privilegio.
+No subir credenciales, claves privadas, discos de VM ni evidencias sensibles.
 
-The goal of this project is to build a realistic enterprise identity environment from scratch and understand how **Active Directory, DNS, Kerberos, LDAP, PKI and authorization** work together.
+## Licencia
 
-Future iterations will focus on **PowerShell automation, Infrastructure as Code, monitoring and hybrid identity**.
-
----
-
-> ⚠️ This project is intended for educational and homelab purposes and should not be considered a production-ready Active Directory architecture.
+MIT. Consultar [LICENSE](LICENSE). Las dependencias conservan sus propias
+licencias; las licencias de Windows y otros productos son independientes.
